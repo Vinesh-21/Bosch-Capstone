@@ -1,6 +1,5 @@
 from sqlmodel import SQLModel, Field
 from uuid import uuid4
-from datetime import datetime,timezone
 from enum import Enum
 class AlertType(str, Enum):
     performance = "Performance_Anomaly"
@@ -29,7 +28,6 @@ class Alerts(SQLModel, table=True):
     __tablename__ = "alerts"
 
     Alert_id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.now(timezone.utc), nullable=False)
     sensor_id: str = Field(foreign_key="sensor_readings.id")
     kpi_name:str
     kpi_data:float

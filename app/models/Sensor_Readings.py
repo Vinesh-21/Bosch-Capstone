@@ -24,3 +24,4 @@ class Sensor_Readings(SQLModel,table=True):
     mf: float = Field(nullable=False)
     decay_comp: float = Field(nullable=False)
     decay_turbine: float = Field(nullable=False)
+    time:int

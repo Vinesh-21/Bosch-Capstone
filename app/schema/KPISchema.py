@@ -13,4 +13,3 @@ class KPISchema(BaseModel):
     torque_per_rpm: float
     power_per_knot: float
     tic_efficiency: float
-    time: float

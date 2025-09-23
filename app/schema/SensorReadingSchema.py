@@ -20,3 +20,4 @@ class SensorReadingSchema(BaseModel):
     mf: float
     decay_comp: float
     decay_turbine: float
+    time:int

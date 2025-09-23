@@ -1,6 +1,5 @@
 from sqlmodel import SQLModel, Field
 from uuid import uuid4
-from datetime import date
 
 class Turbine_Metadata(SQLModel, table=True):
     __tablename__ = "turbine_metadata"
