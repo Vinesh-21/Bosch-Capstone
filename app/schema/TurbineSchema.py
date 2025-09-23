@@ -1,7 +1,6 @@
-from sqlmodel import SQLModel
-from datetime import date
+from pydantic import BaseModel
 
-class TurbineSchema(SQLModel):
+class TurbineSchema(BaseModel):
     name: str
     location: str
-
+    age: int

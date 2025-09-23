@@ -8,4 +8,5 @@ class Turbine_Metadata(SQLModel, table=True):
     turbine_id: str = Field(default_factory=lambda: str(uuid4()), primary_key=True)
     name: str
     location: str
+    age:int
 

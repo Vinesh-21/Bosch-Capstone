@@ -12,12 +12,12 @@ from sqlalchemy import func, select
 from app.schema.SensorReadingSchema import SensorReadingSchema
 from app.schema.AlertsSchema import AlertsSchema
 from app.schema.TurbineSchema import TurbineSchema
-
+from app.schema.KPISchema import KPISchema
 ### Table Models
 from app.models.Sensor_Readings import Sensor_Readings
 from app.models.Alerts import Alerts
 from app.models.Turbine_Metadata import Turbine_Metadata
-
+from app.models.KPI import KPI
 
 from app.database.session import engine
 from sqlalchemy import text
@@ -57,6 +57,7 @@ async def add_bulk(sensors:List[SensorReadingSchema],session:Annotated[AsyncSess
     return {"inserted": len(sensor_models)}
     
 
+
 ### Health-Summary
 @app.get("/health-summary")
 async def health_summary(session: Annotated[AsyncSession, Depends(get_session)]):
@@ -69,7 +70,19 @@ async def health_summary(session: Annotated[AsyncSession, Depends(get_session)])
     summary = result.mappings().first()
     return summary
 
+### Create KPI Value 
+@app.post("/add_KPI")
+async def KPI_Insertion(KPI_List:List[KPISchema],session:Annotated[AsyncSession,Depends(get_session)]):
+    KPI_records = [KPI(**record.dict()) for record in KPI_List]
 
+    session.add_all(KPI_records)
+    await session.commit()
+    
+    for record in KPI_records:
+        await session.refresh(record)
+
+    return {"inserted": len(KPI_records)}
+    
 ### Sensor-Metrics
 @app.get("/sensor-metrics/")
 async def sensor_metrics(session: Annotated[AsyncSession, Depends(get_session)] ):
@@ -100,27 +113,3 @@ async def create_alert(
     return {"status": "Alert created", "alert_id": new_alert.id}
 
 
-# from fastapi import FastAPI, UploadFile, File
-
-# @app.post("/upload")
-# async def fileUpload(file: UploadFile = File(...)):
-#     return {
-#         "filename": file.filename,
-#         "content_type": file.content_type,
-#         "file_size": len(await file.read()) 
-#     }
-
-
-from fastapi import HTTPException,status
-
-
-# @app.post("/auth")
-# def auth(token: str):
-#     if token == "vinesh":
-#         return HTTPException(
-#             status_code=status.HTTP_200_OK,detail={
-#             "Auth":"Authorized"
-#         })
-#     return HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail={"message":"Invalid Token"})
